@@ -1,0 +1,9 @@
+./Controller/Ws.php
+./Controller/_Master.php
+./DataType/DTWsPackage.php
+./etc/config/Ws/config/_datatype.php
+./etc/config/config.php
+./etc/routing/ws.php
+./Model/Log.php
+./Model/Ws.php
+./Model/Informer.php

@@ -1,0 +1,8 @@
+{
+  "config": {
+    "autoloader-suffix": "Ws"
+  },
+  "require": {
+    "bloatless/php-websocket": "v3.0.3"
+  }
+}
