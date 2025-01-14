@@ -5,7 +5,7 @@
  */
 namespace Ws\Controller;
 
-use MVC\DataType\DTRequestCurrent;
+use MVC\DataType\DTRequestIn;
 use MVC\DataType\DTRoute;
 use MVC\Request;
 use Ws\DataType\DTWsPackage;
@@ -16,42 +16,42 @@ use Ws\DataType\DTWsPackage;
 class Ws extends _Master
 {
     /**
-     * @param \MVC\DataType\DTRequestCurrent $oDTRequestCurrent
+     * @param \MVC\DataType\DTRequestIn $oDTRequestIn
      * @param \MVC\DataType\DTRoute          $oDTRoute
      * @throws \ReflectionException
      */
-    public function __construct(DTRequestCurrent $oDTRequestCurrent, DTRoute $oDTRoute)
+    public function __construct(DTRequestIn $oDTRequestIn, DTRoute $oDTRoute)
     {
         // CLI only
-        if (false === Request::isCli())
+        if (false === Request::in()->get_isCli())
         {
             echo 'CLI only. Abort.';
             exit();
         }
 
-        parent::__construct($oDTRequestCurrent, $oDTRoute);
+        parent::__construct($oDTRequestIn, $oDTRoute);
     }
 
     /**
      * starts WebSocket Server
-     * @param \MVC\DataType\DTRequestCurrent $oDTRequestCurrent
+     * @param \MVC\DataType\DTRequestIn $oDTRequestIn
      * @param \MVC\DataType\DTRoute          $oDTRoute
      * @return void
      * @throws \ReflectionException
      */
-	public function serve(DTRequestCurrent $oDTRequestCurrent, DTRoute $oDTRoute)
+	public function serve(DTRequestIn $oDTRequestIn, DTRoute $oDTRoute)
 	{
         \Ws\Model\Ws::init()->serve();
 	}
 
     /**
      * push Messages to Server
-     * @param DTRequestCurrent $oDTRequestCurrent
+     * @param DTRequestIn $oDTRequestIn
      * @param DTRoute $oDTRoute
      * @return void
      * @throws \ReflectionException
      */
-    public function pushtest(DTRequestCurrent $oDTRequestCurrent, DTRoute $oDTRoute)
+    public function pushtest(DTRequestIn $oDTRequestIn, DTRoute $oDTRoute)
     {
         while (true)
         {

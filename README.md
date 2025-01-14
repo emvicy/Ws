@@ -1,18 +1,11 @@
 
-## add Route
+# Ws
 
-**Emvicy >= 1.12:**
+a WebSocket module for Emvicy2 (2.x) PHP Framework: https://github.com/emvicy/Emvicy/tree/2.x
 
-nothing to do. All routes are added.
+---
 
-**Emvicy < 1.12:**
-
-_copy or symlink the WS routing file `ws.php` to your primary module_  
-~~~bash
-/modules/Ws/etc/routing/ws.php 
-~~~
-
-## public files
+## Installation
 
 _publish public Files_    
 ~~~bash
@@ -28,7 +21,7 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
         ...    
         // WS
         '/Ws/assets/pnotify.min.css',         
-        '/Ws/assets/pnotify.brighttheme.css',     
+        '/Ws/assets/pnotify.brighttheme.min.css',     
     ))
     ->set_aScript(array (
         ...

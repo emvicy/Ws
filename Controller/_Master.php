@@ -6,7 +6,7 @@
 namespace Ws\Controller;
 
 use App\Controller;
-use MVC\DataType\DTRequestCurrent;
+use MVC\DataType\DTRequestIn;
 use MVC\DataType\DTRoute;
 use MVC\MVCTrait\TraitDataType;
 
@@ -27,13 +27,13 @@ class _Master extends Controller
     }
 
     /**
-     * @param \MVC\DataType\DTRequestCurrent $oDTRequestCurrent
+     * @param \MVC\DataType\DTRequestIn $oDTRequestIn
      * @param \MVC\DataType\DTRoute          $oDTRoute
      * @throws \ReflectionException
      */
-    public function __construct(DTRequestCurrent $oDTRequestCurrent, DTRoute $oDTRoute)
+    public function __construct(DTRequestIn $oDTRequestIn, DTRoute $oDTRoute)
 	{
-        parent::__construct($oDTRequestCurrent, $oDTRoute);
+        parent::__construct($oDTRequestIn, $oDTRoute);
     }
 
     public function __destruct()

@@ -1,5 +1,4 @@
 <?php
-# 2024-06-03 15:48:52
 
 /**
  * @name $WsDataType
@@ -13,7 +12,7 @@ class DTWsPackage
 {
 	use TraitDataType;
 
-	public const DTHASH = '9a7bedf35eb606e45caf98403af9f699';
+	public const DTHASH = 'fd955f01507ae8482d7239982826f37e';
 
 	/**
 	 * @required true
@@ -48,7 +47,6 @@ class DTWsPackage
 	{
 		\MVC\Event::run('DTWsPackage.__construct.before', $oDTValue);
 		$aData = $oDTValue->get_mValue();
-
 		$this->sApp = "Informer";
 		$this->sAction = "echo";
 		$this->sMessage = '';
@@ -73,26 +71,6 @@ class DTWsPackage
         $oDTValue = DTValue::create()->set_mValue($oObject); \MVC\Event::run('DTWsPackage.create.after', $oDTValue);
 
         return $oDTValue->get_mValue();
-    }
-
-	/**
-     * @deprecated
-     * @param array $aData
-     * @return array
-     * @throws \ReflectionException
-     */
-    public static function cast(array $aData = array())
-    {
-        $oThis = new self();
-
-        foreach ($aData as $sKey => $sValue)
-        {
-            $sVar = $aData[$sKey];
-            settype($sVar, $oThis->getDocCommentValueOfProperty($sKey));
-            $aData[$sKey] = $sVar;
-        }
-
-        return $aData;
     }
 
 	/**
