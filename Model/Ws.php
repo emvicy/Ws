@@ -26,13 +26,21 @@ class Ws
     /**
      * @var string
      */
-    protected $sPidFileName;
+    protected $sPidFile;
 
     /**
      * @var string
      */
     protected $sLockFile;
 
+    /**
+     * @var string
+     */
+    protected $sSocketFile;
+
+    /**
+     * @var null
+     */
     protected static $_oInstance = null;
 
     /**
@@ -40,6 +48,7 @@ class Ws
      */
     protected function __construct()
     {
+        $this->sSocketFile = Config::MODULE('Ws')['socketFile'];
         $this->oServer = new Server(
             Config::MODULE('Ws')['sAddress'],
             Config::MODULE('Ws')['iPort'],
@@ -76,6 +85,16 @@ class Ws
      */
     public function serve()
     {
+        if (true === Application::isMaintenance())
+        {
+            return false;
+        }
+
+        if (self::isRunning())
+        {
+            return false;
+        }
+
         $this->sLockFile = Lock::create(bReturn: true);
 
         if (false === $this->createPidFile())
@@ -129,17 +148,45 @@ class Ws
      */
     public function getPidFileName()
     {
-        return $this->sPidFileName;
+        return $this->sPidFile;
     }
 
     /**
-     * remove pidFile and lockFile
      * @return void
+     * @throws \ReflectionException
      */
     public function freeService()
     {
-        unlink($this->sPidFileName);
-        unlink($this->sLockFile);
+        if (false === empty($this->sPidFile) && true === file_exists($this->sPidFile))
+        {
+            unlink($this->sPidFile);
+        }
+
+        if (false === empty($this->sLockFile) && true === file_exists($this->sLockFile))
+        {
+            unlink($this->sLockFile);
+        }
+    }
+
+    /**
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public static function isRunning()
+    {
+        @fsockopen(
+            'tcp://' . Config::MODULE('Ws')['sAddress'], Config::MODULE('Ws')['iPort'],
+            $iErrorCode,
+            $sErrorMessage,
+            2
+        );
+
+        if (false === empty($iErrorCode))
+        {
+            Error::error($sErrorMessage, $iErrorCode);
+        }
+
+        return (true === empty($iErrorCode));
     }
 
     #-------------------------------------------------------------------------------------------------------------------
@@ -152,16 +199,16 @@ class Ws
     protected function createPidFile()
     {
         // create and save pidFileName
-        $this->sPidFileName = Config::get_MVC_BASE_PATH()
-            . '/'
-            . str_replace(
+        $this->sPidFile = Config::get_MVC_BASE_PATH()
+                          . '/'
+                          . str_replace(
                 '{pid}',
                 getmypid(),
                 Config::MODULE('Ws')['sPidFileName']
             );
 
         // create pidFile
-        return touch($this->sPidFileName);
+        return touch($this->sPidFile);
     }
 
     /**
@@ -171,7 +218,7 @@ class Ws
      */
     protected function killOnIsMissingPidFile()
     {
-        if (false === file_exists($this->sPidFileName))
+        if (false === file_exists($this->sPidFile))
         {
             $this->kill();
         }
@@ -195,6 +242,8 @@ class Ws
 
     private function kill()
     {
+        $this->freeService();
+
         posix_kill(
             getmypid(),
             SIGKILL
@@ -206,7 +255,5 @@ class Ws
                 posix_strerror(posix_get_last_error())
             );
         }
-
-        unlink($this->sLockFile);
     }
 }
