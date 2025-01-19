@@ -10,7 +10,7 @@ a WebSocket module for Emvicy2 (2.x) PHP Framework: https://github.com/emvicy/Em
 _publish public Files_    
 ~~~bash
 cd /modules/Ws/; \
-./_publish.sh;
+./_install.sh
 ~~~
 
 _add styles and script to your (primary module) routes_  

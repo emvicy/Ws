@@ -2,21 +2,23 @@
 
 MODULENAME="$(basename "$(pwd)")";
 sHere=`pwd`;
+sAppRoot=`realpath "../../"`;
 sModuleDir=`realpath "../../modules/"`;
-xPhp=`type -p php`;
 xGit=`type -p git`;
-/usr/bin/clear;
+xPhp=`type -p php`;
 
+#------------------------------------------------------------
 # read .env
 . ../../.env;
 
 #------------------------------------------------------------
-# install further modules
+# maintenance
 
-cd "$sHere";
-cd "$sModuleDir";
+echo -e "\ninstalling...";
+cd "$sAppRoot";
 
-#...
+# maintenance file
+#/usr/bin/touch 'maintenance';
 
 #------------------------------------------------------------
 # public files
@@ -24,26 +26,18 @@ cd "$sHere";
 . _publish.sh
 
 #------------------------------------------------------------
-# init
-
-cd "$sHere";
-cd ../../public/;
-$xPhp index.php;
-
-cd "$sHere";
-cd ../../;
-$xPhp emvicy up;
-
-#------------------------------------------------------------
-# generate DTClasses
-
-cd "$sHere";
-cd ../../;
-$xPhp emvicy datatype;
-
-#------------------------------------------------------------
 # done
 
+cd "$sAppRoot";
+
+$xPhp emvicy up;
+
+# clear cache
+$xPhp emvicy cc;
+
+# datatypes
+$xPhp emvicy dt;
+
 cd "$sHere";
-/bin/echo "...done!";
+echo -e "installing complete.\n\n";
 
