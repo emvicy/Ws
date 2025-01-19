@@ -70,14 +70,6 @@ class Ws
     }
 
     /**
-     * @return Server
-     */
-    public function getServer()
-    {
-        return $this->oServer;
-    }
-
-    /**
      * run WebSocket Server
      * @return false|void
      * @throws \ReflectionException
@@ -103,90 +95,11 @@ class Ws
     }
 
     /**
-     * @return bool success
-     * @throws \ReflectionException
+     * @return Server
      */
-    protected function createPidFile()
+    public function getServer()
     {
-        // create and save pidFileName
-        $this->sPidFileName = Config::get_MVC_BASE_PATH()
-            . '/'
-            . str_replace(
-                '{pid}',
-                getmypid(),
-                Config::MODULE('Ws')['sPidFileName']
-            );
-
-        // create pidFile
-        return touch($this->sPidFileName);
-    }
-
-    /**
-     * @return string
-     */
-    public function getPidFileName()
-    {
-        return $this->sPidFileName;
-    }
-
-    /**
-     * remove pidFile and lockFile
-     * @return void
-     */
-    public function freeService()
-    {
-        unlink($this->sPidFileName);
-        unlink($this->sLockFile);
-    }
-
-    /**
-     * kills running process if pidfile is missing
-     * @return void
-     * @throws \ReflectionException
-     */
-    protected function killOnIsMissingPidFile()
-    {
-        if (false === file_exists($this->sPidFileName))
-        {
-            posix_kill(
-                getmypid(),
-                SIGKILL
-            );
-
-            if (posix_get_last_error() > 0)
-            {
-                Error::error(
-                    posix_strerror(posix_get_last_error())
-                );
-            }
-
-            unlink($this->sLockFile);
-        }
-    }
-
-    /**
-     * kills running process if app is in maintenance mode
-     * @return void
-     * @throws \ReflectionException
-     */
-    protected function killOnMaintenance()
-    {
-        if (true === Application::isMaintenance())
-        {
-            posix_kill(
-                getmypid(),
-                SIGKILL
-            );
-
-            if (posix_get_last_error() > 0)
-            {
-                Error::error(
-                    posix_strerror(posix_get_last_error())
-                );
-            }
-
-            unlink($this->sLockFile);
-        }
+        return $this->oServer;
     }
 
     /**
@@ -209,5 +122,91 @@ class Ws
                 'data' => $oDTWsPackage->get_sType() . '||' . $sMessage,
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPidFileName()
+    {
+        return $this->sPidFileName;
+    }
+
+    /**
+     * remove pidFile and lockFile
+     * @return void
+     */
+    public function freeService()
+    {
+        unlink($this->sPidFileName);
+        unlink($this->sLockFile);
+    }
+
+    #-------------------------------------------------------------------------------------------------------------------
+    # protected
+
+    /**
+     * @return bool success
+     * @throws \ReflectionException
+     */
+    protected function createPidFile()
+    {
+        // create and save pidFileName
+        $this->sPidFileName = Config::get_MVC_BASE_PATH()
+            . '/'
+            . str_replace(
+                '{pid}',
+                getmypid(),
+                Config::MODULE('Ws')['sPidFileName']
+            );
+
+        // create pidFile
+        return touch($this->sPidFileName);
+    }
+
+    /**
+     * kills running process if pidfile is missing
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function killOnIsMissingPidFile()
+    {
+        if (false === file_exists($this->sPidFileName))
+        {
+            $this->kill();
+        }
+    }
+
+    /**
+     * kills running process if app is in maintenance mode
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function killOnMaintenance()
+    {
+        if (true === Application::isMaintenance())
+        {
+            $this->kill();
+        }
+    }
+
+    #-------------------------------------------------------------------------------------------------------------------
+    # private
+
+    private function kill()
+    {
+        posix_kill(
+            getmypid(),
+            SIGKILL
+        );
+
+        if (posix_get_last_error() > 0)
+        {
+            Error::error(
+                posix_strerror(posix_get_last_error())
+            );
+        }
+
+        unlink($this->sLockFile);
     }
 }
