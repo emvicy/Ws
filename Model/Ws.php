@@ -7,6 +7,7 @@ namespace Ws\Model;
 
 use Bloatless\WebSocket\PushClient;
 use Bloatless\WebSocket\Server;
+use MVC\Application;
 use MVC\Config;
 use MVC\Error;
 use MVC\Lock;
@@ -95,6 +96,7 @@ class Ws
         // Default Timer
         $this->oServer->addTimer(1000, function () {
             $this->killOnIsMissingPidFile();
+            $this->killOnMaintenance();
         });
 
         $this->oServer->run();
@@ -145,6 +147,31 @@ class Ws
     protected function killOnIsMissingPidFile()
     {
         if (false === file_exists($this->sPidFileName))
+        {
+            posix_kill(
+                getmypid(),
+                SIGKILL
+            );
+
+            if (posix_get_last_error() > 0)
+            {
+                Error::error(
+                    posix_strerror(posix_get_last_error())
+                );
+            }
+
+            unlink($this->sLockFile);
+        }
+    }
+
+    /**
+     * kills running process if app is in maintenance mode
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function killOnMaintenance()
+    {
+        if (true === Application::isMaintenance())
         {
             posix_kill(
                 getmypid(),
