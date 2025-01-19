@@ -6,9 +6,6 @@
 // add routing files dir
 $aConfig['MVC_ROUTING_DIR'][] = realpath(__DIR__ . '/../') . '/routing';
 
-// Linux: get SERVER_ADDR from hostname
-//list($_SERVER['SERVER_ADDR']) = explode(' ', trim(shell_exec('hostname -I')));
-
 $aConfig['MODULE']['Ws'] = array(
 
     'socketFile' => '/tmp/phpwss.sock',

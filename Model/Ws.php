@@ -34,11 +34,6 @@ class Ws
     protected $sLockFile;
 
     /**
-     * @var string
-     */
-    protected $sSocketFile;
-
-    /**
      * @var null
      */
     protected static $_oInstance = null;
@@ -48,7 +43,6 @@ class Ws
      */
     protected function __construct()
     {
-        $this->sSocketFile = Config::MODULE('Ws')['socketFile'];
         $this->oServer = new Server(
             Config::MODULE('Ws')['sAddress'],
             Config::MODULE('Ws')['iPort'],
@@ -56,7 +50,7 @@ class Ws
         );
 
         // add a PSR-3 compatible logger (optional)
-        $this->oServer->setLogger(new Log());
+//        $this->oServer->setLogger(new Log());
 
         // server settings
         $this->oServer->setMaxClients(Config::MODULE('Ws')['iMaxClients']);
@@ -107,6 +101,7 @@ class Ws
         // Default Timer
         $this->oServer->addTimer(1000, function () {
             $this->killOnIsMissingPidFile();
+            $this->killOnMissingSocketFile();
             $this->killOnMaintenance();
         });
 
@@ -131,6 +126,11 @@ class Ws
      */
     public function push(DTWsPackage $oDTWsPackage)
     {
+        if (false === self::isRunning())
+        {
+            return;
+        }
+
         $sMessage = \Parsedown::instance()->text($oDTWsPackage->get_sMessage());
 
         $oPushClient = new PushClient(Config::MODULE('Ws')['socketFile']);
@@ -181,11 +181,6 @@ class Ws
             2
         );
 
-        if (false === empty($iErrorCode))
-        {
-            Error::error($sErrorMessage, $iErrorCode);
-        }
-
         return (true === empty($iErrorCode));
     }
 
@@ -225,6 +220,18 @@ class Ws
     }
 
     /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function killOnMissingSocketFile()
+    {
+        if (false === file_exists(Config::MODULE('Ws')['socketFile']))
+        {
+            $this->kill();
+        }
+    }
+
+    /**
      * kills running process if app is in maintenance mode
      * @return void
      * @throws \ReflectionException
@@ -243,6 +250,10 @@ class Ws
     private function kill()
     {
         $this->freeService();
+
+        $sFile = strtok(Config::MODULE('Ws')['sPidFileName'],'{');
+        $sGlob = Config::get_MVC_BASE_PATH() . '/' . $sFile . '*';
+        array_map('unlink', glob($sGlob));
 
         posix_kill(
             getmypid(),
