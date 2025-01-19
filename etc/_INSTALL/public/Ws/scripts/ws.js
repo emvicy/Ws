@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     //-----------------------------------------------------------------------
     // websocket
-    var oWs, sUrl = 'ws://127.0.0.1:8000/Informer';
+    var oWs, sUrl = 'wss://' + location.hostname + ':8000/Informer';
 
     function websocket() {
 

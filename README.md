@@ -32,14 +32,29 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
     ));
 ~~~
 
+**ddev** 
+
+_add to your `.ddev/config.yaml`_  
+~~~bash
+# WebSocket
+web_extra_exposed_ports:
+    - name: websocket
+      container_port: 8000
+      http_port: 7999
+      https_port: 8000
+~~~
+
+---
+
 ## Templating
 
 _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_  
 ~~~html
 <!--WS-->
 <div class="float-end" style="position: fixed; bottom: 20px; right: 10px; margin: 0 10px !important;">
-	<span id="wsSocketStatusInfo">
-		<a class="badge text-success" title="WebSocket Server"><i class="fa fa-check"></i></a>
+    <small><kbd>WebSocket</kbd></small>
+    <span id="wsSocketStatusInfo">
+		<a class="badge text-danger" title="WebSocket Server"><i class="fa fa-exclamation-triangle"></i></a>
 	</span>
 </div>
 ~~~
