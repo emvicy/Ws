@@ -7,6 +7,7 @@ namespace Ws\Controller;
 
 use MVC\DataType\DTRequestIn;
 use MVC\DataType\DTRoute;
+use MVC\Process;
 use MVC\Request;
 use Ws\DataType\DTWsPackage;
 
@@ -53,6 +54,8 @@ class Ws extends _Master
      */
     public function pushtest(DTRequestIn $oDTRequestIn, DTRoute $oDTRoute)
     {
+        Process::savePid();
+
         while (true)
         {
             $aType = array('info', 'success', 'notice', 'error');
@@ -61,12 +64,15 @@ class Ws extends _Master
             \Ws\Model\Ws::init()->push(
                 DTWsPackage::create()
                     ->set_sType($aType[$iRand])
-                    ->set_sMessage('**PUSH TEST** at ' . date('Y-m-d H:i:s'))
+                    ->set_sMessage("<code>" . __METHOD__ . "</code>\n**PUSH TEST** at " . date('Y-m-d H:i:s') . "\n<code>pid: " . getmypid() . "</code>\n")
             );
             sleep(5);
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function __destruct()
     {
         parent::__destruct();

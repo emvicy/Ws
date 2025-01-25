@@ -52,9 +52,9 @@ _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_
 ~~~html
 <!--WS-->
 <div class="float-end" style="position: fixed; bottom: 20px; right: 10px; margin: 0 10px !important;">
-    <small><kbd>WebSocket</kbd></small>
-    <span id="wsSocketStatusInfo">
-		<a class="badge text-danger" title="WebSocket Server"><i class="fa fa-exclamation-triangle"></i></a>
+	<small><kbd>WebSocket</kbd></small>
+	<span id="wsSocketStatusInfo">
+		<a class="badge text-danger" title="WebSocket Server"><i class="fa fa-check"></i></a>
 	</span>
 </div>
 ~~~
