@@ -8,9 +8,11 @@ namespace Ws\Model;
 use Bloatless\WebSocket\PushClient;
 use Bloatless\WebSocket\Server;
 use MVC\Application;
+use MVC\Cache;
 use MVC\Config;
 use MVC\Error;
 use MVC\Lock;
+use MVC\Process;
 use Ws\DataType\DTWsPackage;
 
 /**
@@ -26,7 +28,7 @@ class Ws
     /**
      * @var string
      */
-    protected $sPidFile;
+    protected $iPid;
 
     /**
      * @var string
@@ -84,17 +86,36 @@ class Ws
             return false;
         }
 
-        if (self::isRunning())
+        #---------------------------------------------------------------------------------------------------------------
+        # Grace period
+
+        $iMinimumWaitingSeconds = 10;
+        (true === empty(Cache::getCache(__METHOD__))) ? Cache::saveCache(__METHOD__, time()) : false;
+        $iTimePassed = (time() - (int) Cache::getCache(__METHOD__));
+        $bPass = ($iTimePassed >= $iMinimumWaitingSeconds) ? true : false;
+        (true === $bPass) ? Cache::saveCache(__METHOD__, time()) : false;
+
+        if (false === $bPass)
         {
             return false;
         }
+
+        #---------------------------------------------------------------------------------------------------------------
 
         $this->sLockFile = Lock::create(bReturn: true);
 
-        if (false === $this->createPidFile())
+        if (false === Process::savePid())
         {
             return false;
         }
+
+        if (true === self::isRunning())
+        {
+            return false;
+        }
+
+        #---------------------------------------------------------------------------------------------------------------
+        # start server
 
         $this->oServer->registerApplication('Informer', Informer::getInstance());
 
@@ -144,23 +165,12 @@ class Ws
     }
 
     /**
-     * @return string
-     */
-    public function getPidFileName()
-    {
-        return $this->sPidFile;
-    }
-
-    /**
      * @return void
      * @throws \ReflectionException
      */
     public function freeService()
     {
-        if (false === empty($this->sPidFile) && true === file_exists($this->sPidFile))
-        {
-            unlink($this->sPidFile);
-        }
+        Process::deletePidFile(getmypid());
 
         if (false === empty($this->sLockFile) && true === file_exists($this->sLockFile))
         {
@@ -188,32 +198,13 @@ class Ws
     # protected
 
     /**
-     * @return bool success
-     * @throws \ReflectionException
-     */
-    protected function createPidFile()
-    {
-        // create and save pidFileName
-        $this->sPidFile = Config::get_MVC_BASE_PATH()
-                          . '/'
-                          . str_replace(
-                '{pid}',
-                getmypid(),
-                Config::MODULE('Ws')['sPidFileName']
-            );
-
-        // create pidFile
-        return touch($this->sPidFile);
-    }
-
-    /**
      * kills running process if pidfile is missing
      * @return void
      * @throws \ReflectionException
      */
     protected function killOnIsMissingPidFile()
     {
-        if (false === file_exists($this->sPidFile))
+        if (false === Process::hasPidFile(getmypid()))
         {
             $this->kill();
         }
@@ -250,10 +241,7 @@ class Ws
     private function kill()
     {
         $this->freeService();
-
-        $sFile = strtok(Config::MODULE('Ws')['sPidFileName'],'{');
-        $sGlob = Config::get_MVC_BASE_PATH() . '/' . $sFile . '*';
-        array_map('unlink', glob($sGlob));
+        Process::deletePidFile(getmypid());
 
         posix_kill(
             getmypid(),

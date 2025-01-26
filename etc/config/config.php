@@ -9,7 +9,6 @@ $aConfig['MVC_ROUTING_DIR'][] = realpath(__DIR__ . '/../') . '/routing';
 $aConfig['MODULE']['Ws'] = array(
 
     'socketFile' => '/tmp/phpwss.sock',
-    'sPidFileName' => '.mvc-websocket-run.{pid}',
 
     'sProtocol' => 'wss://',
     'sAddress' => '0.0.0.0',

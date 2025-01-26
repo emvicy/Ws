@@ -7,27 +7,31 @@ a WebSocket module for Emvicy2 (2.x) PHP Framework: https://github.com/emvicy/Em
 
 ## Installation
 
-_publish public Files_    
+_run install bash script_    
 ~~~bash
 cd /modules/Ws/; \
 ./_install.sh
 ~~~
 
-_add styles and script to your (primary module) routes_  
+_add styles and scripts to your (primary module) routes_  
 ~~~php
 $oDTRoutingAdditional = DTRoutingAdditional::create()
     ...
     ->set_aStyle(array (
         ...    
         // WS
-        '/Ws/assets/pnotify.min.css',         
-        '/Ws/assets/pnotify.brighttheme.min.css',     
+        '/Ws/assets/pnotify/css/PNotify.min.css',
+        '/Ws/assets/pnotify/css/BrightTheme.min.css',
+        '/Ws/assets/pnotify/css/PNotifyConfirm.min.css',
+        '/Ws/assets/pnotify/css/PNotifyDesktop.min.css', 
     ))
     ->set_aScript(array (
         ...
         // WS
-        '/Ws/assets/pnotify.min.js',        
+        '/Ws/assets/pnotify/js/PNotify.min.js',
         '/Ws/scripts/pnotify.min.js',
+        '/Ws/assets/pnotify/js/PNotifyConfirm.min.js',
+        '/Ws/assets/pnotify/js/PNotifyDesktop.min.js',
         '/Ws/scripts/ws.min.js',
     ));
 ~~~
@@ -52,9 +56,9 @@ _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_
 ~~~html
 <!--WS-->
 <div class="float-end" style="position: fixed; bottom: 20px; right: 10px; margin: 0 10px !important;">
-	<small><kbd>WebSocket</kbd></small>
-	<span id="wsSocketStatusInfo">
-		<a class="badge text-danger" title="WebSocket Server"><i class="fa fa-check"></i></a>
+    <small><kbd>WebSocket</kbd></small>
+    <span id="wsSocketStatusInfo">
+		<a class="badge text-danger" title="WebSocket Server"><i class="fa fa-exclamation-triangle"></i></a>
 	</span>
 </div>
 ~~~
@@ -63,14 +67,25 @@ _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_
 
 ### Server
 
-_start via cronjob: WebSocket Server_  
+_start via cronjob_    
 ~~~bash
 # WebSocket Server; start in background
 # change the cd Path to your Application
-* * * * * cd /var/www/Emvicy/public; /usr/bin/php index.php '/ws/serve/' > /dev/null 2>/dev/null & echo $!
+* * * * * cd /var/www/html/public; /usr/bin/php index.php '/ws/serve/' > /dev/null 2>/dev/null & echo $!
 ~~~
 
-_start by hand: WebSocket Server_  
+_start via Command in a Controller_    
+~~~php
+Process::callRouteAsync('/ws/serve/');
+~~~
+or
+~~~php
+Process::callRouteAsync(
+    Route::getOnTag('WsServe')->get_path()
+);
+~~~
+
+_start by hand on command line_  
 ~~~php
 php index.php '/ws/serve/'
 ~~~
