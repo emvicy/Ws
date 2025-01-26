@@ -19,19 +19,16 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
     ...
     ->set_aStyle(array (
         ...    
-        // WS
-        '/Ws/assets/pnotify/css/PNotify.min.css',
-        '/Ws/assets/pnotify/css/BrightTheme.min.css',
-        '/Ws/assets/pnotify/css/PNotifyConfirm.min.css',
-        '/Ws/assets/pnotify/css/PNotifyDesktop.min.css', 
+        // WS_old ✅
+        '/Ws_old/assets/pnotify.min.css',
+        '/Ws_old/assets/pnotify.brighttheme.min.css',
     ))
     ->set_aScript(array (
         ...
-        // WS
-        '/Ws/assets/pnotify/js/PNotify.min.js',
-        '/Ws/scripts/pnotify.min.js',
-        '/Ws/assets/pnotify/js/PNotifyConfirm.min.js',
-        '/Ws/assets/pnotify/js/PNotifyDesktop.min.js',
+        // WS_old ✅
+        '/Ws_old/assets/pnotify.min.js',
+        '/Ws_old/assets/pnotify.desktop.min.js',
+        '/Ws_old/scripts/pnotify.min.js',
         '/Ws/scripts/ws.min.js',
     ));
 ~~~
