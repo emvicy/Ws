@@ -110,3 +110,59 @@ modules/Ws/etc/config/config.php
 ~~~
 
 overwrite those config settings in your primary module.
+
+---
+
+## apache2 vHost Config
+
+_Requirements_
+~~~bash
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_wstunnel
+
+systemctl restart apache2
+~~~
+
+In the application that is to access the WebSocket, a
+ProxyPass to the local WebSocket must be declared.
+
+_ProxyPass to WebSocket_
+~~~bash
+    ...
+    # WebSocket
+    RewriteEngine On
+    # if WebSocket Request ...
+    RewriteCond %{HTTP:Upgrade} =websocket [NC]
+    # ...then pass through to local WebSocket server
+    RewriteRule /(.*) ws://127.0.0.1:8000/$1 [P,L]
+    ...
+~~~
+
+_complete real-life example_
+~~~bash
+<IfModule mod_ssl.c>
+<VirtualHost example.com:443>
+    ServerAdmin webmaster@mediafinanz.de
+    DocumentRoot /var/www/example.com/public
+    ServerName example.com
+
+    <Directory /var/www/example.com/public>
+        Options FollowSymlinks
+        AllowOverride All
+    </Directory>
+
+    CustomLog       /var/log/apache2/example.com.log combined
+    ErrorLog        /var/log/apache2/example.com.error.log
+
+    SSLCertificateFile /etc/letsencrypt/live/example.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
+    Include /etc/letsencrypt/options-ssl-apache.conf
+
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} =websocket [NC]
+    RewriteRule /(.*) ws://127.0.0.1:8000/$1 [P,L]
+
+</VirtualHost>
+</IfModule>
+~~~
