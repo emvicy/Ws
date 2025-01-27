@@ -11,12 +11,12 @@ $aConfig['MODULE']['Ws'] = array(
     'socketFile' => '/tmp/phpwss.sock',
 
     'sProtocol' => 'wss://',
-    'sAddress' => '0.0.0.0',
+    'sAddress' => '127.0.0.1',
     'iPort' => 8000,
     'sPath' => '/Informer',
 
     // domain|host only (no protocol, no slashes)
-    'sOrigin' => '0.0.0.0',
+    'sOrigin' => '127.0.0.1',
     'bCheckOrigin' => false,
     'bVerbose' => true,
 

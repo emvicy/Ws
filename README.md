@@ -19,19 +19,24 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
     ...
     ->set_aStyle(array (
         ...    
-        // WS_old
+        // WS
         '/Ws_old/assets/pnotify.min.css',
         '/Ws_old/assets/pnotify.brighttheme.min.css',
     ))
     ->set_aScript(array (
         ...
-        // WS_old
+        // WS
         '/Ws_old/assets/pnotify.min.js',
         '/Ws_old/assets/pnotify.desktop.min.js',
         '/Ws_old/scripts/pnotify.min.js',
+        
+        // develop:     '/Ws/scripts/ws.min.js'
+        // production:  '/Ws/scripts/ws.prod.min.js'
+        //              see 'apache2 vHost Config for `production` Environment' below
         '/Ws/scripts/ws.min.js',
     ));
 ~~~
+
 
 **ddev** 
 
@@ -137,7 +142,7 @@ overwrite those config settings in your primary module.
 
 ---
 
-## apache2 vHost Config
+## apache2 vHost Config for `production` Environment
 
 _Requirements_
 ~~~bash
