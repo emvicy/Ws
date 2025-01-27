@@ -19,13 +19,13 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
     ...
     ->set_aStyle(array (
         ...    
-        // WS_old ✅
+        // WS_old
         '/Ws_old/assets/pnotify.min.css',
         '/Ws_old/assets/pnotify.brighttheme.min.css',
     ))
     ->set_aScript(array (
         ...
-        // WS_old ✅
+        // WS_old
         '/Ws_old/assets/pnotify.min.js',
         '/Ws_old/assets/pnotify.desktop.min.js',
         '/Ws_old/scripts/pnotify.min.js',
@@ -34,6 +34,8 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
 ~~~
 
 **ddev** 
+
+if you are using ddev:
 
 _add to your `.ddev/config.yaml`_  
 ~~~bash
@@ -64,6 +66,14 @@ _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_
 
 ### Server
 
+**start**
+
+there are several ways to start the websocket server.  
+
+Once the server is running, you cannot start it again. If you try to, nothing happens, because the 
+start routine always checks if the server already runs. And if it is already running, the code will exit.
+
+
 _start via cronjob_    
 ~~~bash
 # WebSocket Server; start in background
@@ -86,6 +96,20 @@ _start by hand on command line_
 ~~~php
 php index.php '/ws/serve/'
 ~~~
+
+**stop**
+
+remove the WebSocket `pid` from the pid folder; usually this is `application/pid/`
+
+or
+
+set Application to `maintainance` mode
+
+or
+
+just `kill` the process by hand
+
+---
 
 ### Message
 
