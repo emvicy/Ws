@@ -154,14 +154,18 @@ class Ws
 
         $sMessage = \Parsedown::instance()->text($oDTWsPackage->get_sMessage());
 
-        $oPushClient = new PushClient(Config::MODULE('Ws')['socketFile']);
-        $oPushClient->sendToApplication(
-            $oDTWsPackage->get_sApp(),
-            array(
-                'action' => $oDTWsPackage->get_sAction(),
-                'data' => $oDTWsPackage->get_sType() . '||' . $sMessage,
-            )
-        );
+        try {
+            $oPushClient = new PushClient(Config::MODULE('Ws')['socketFile']);
+            $oPushClient->sendToApplication(
+                $oDTWsPackage->get_sApp(),
+                array(
+                    'action' => $oDTWsPackage->get_sAction(),
+                    'data' => $oDTWsPackage->get_sType() . '||' . $sMessage,
+                )
+            );
+        } catch (\Exception $oException) {
+            \MVC\Error::exception($oException);
+        }
     }
 
     /**
