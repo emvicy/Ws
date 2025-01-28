@@ -30,10 +30,12 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
         '/Ws_old/assets/pnotify.desktop.min.js',
         '/Ws_old/scripts/pnotify.min.js',
         
-        // develop:     '/Ws/scripts/ws.min.js'
-        // production:  '/Ws/scripts/ws.prod.min.js'
+        // ddev:        '/Ws/scripts/wss.domain.port.min.js'
+        // production:  '/Ws/scripts/wss.domain.min.js'
         //              see 'apache2 vHost Config for `production` Environment' below
-        '/Ws/scripts/ws.min.js',
+        #'/Ws/scripts/ws.domain.port.min.js',
+        '/Ws/scripts/wss.domain.port.min.js',
+        #'/Ws/scripts/wss.domain.min.js',
     ));
 ~~~
 
