@@ -3,6 +3,7 @@
 ./DataType/DTWsPackage.php
 ./etc/config/Ws/config/_datatype.php
 ./etc/config/config.php
+./etc/socket_test.php
 ./etc/routing/ws.php
 ./Model/Log.php
 ./Model/Ws.php
