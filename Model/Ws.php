@@ -178,7 +178,7 @@ class Ws
 
         if (false === empty($this->sLockFile) && true === file_exists($this->sLockFile))
         {
-            unlink($this->sLockFile);
+            @unlink($this->sLockFile);
         }
     }
 
