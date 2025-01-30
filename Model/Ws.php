@@ -10,6 +10,7 @@ use Bloatless\WebSocket\Server;
 use MVC\Application;
 use MVC\Cache;
 use MVC\Config;
+use MVC\Dir;
 use MVC\Error;
 use MVC\Lock;
 use MVC\Process;
@@ -178,7 +179,7 @@ class Ws
 
         if (false === empty($this->sLockFile) && true === file_exists($this->sLockFile))
         {
-            @unlink($this->sLockFile);
+            Dir::remove($this->sLockFile);
         }
     }
 
