@@ -56,6 +56,16 @@ web_extra_exposed_ports:
 
 ---
 
+## Content-Security-Policy
+
+make sure the policy `connect-src` is also set to your WebSocket domain. This depends on your setup; It may be one of these
+
+- `connect-src ws://emaxple.com:8000;`
+- `connect-src wss://emaxple.com:8000;`
+- `connect-src wss://emaxple.com;`
+
+---
+
 ## Templating
 
 _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_  
