@@ -7,9 +7,19 @@ a WebSocket module for Emvicy2 (2.x) PHP Framework: https://github.com/emvicy/Em
 
 ## Installation
 
+_cd into the modules folder of your `Emvicy` copy; e.g.:_
+~~~bash
+cd /var/www/html/modules/;
+~~~
+
+_git clone_
+~~~bash
+git clone --branch 2.x https://github.com/emvicy/Ws.git Ws;
+~~~
+
 _run install bash script_    
 ~~~bash
-cd /modules/Ws/; \
+cd Ws/; \
 ./_install.sh
 ~~~
 
