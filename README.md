@@ -110,11 +110,11 @@ _start via cronjob_
 
 _start via Command in a Controller_    
 ~~~php
-Process::callRouteAsync('/ws/serve/');
+Process::callRoute('/ws/serve/');
 ~~~
 or
 ~~~php
-Process::callRouteAsync(
+Process::callRoute(
     Route::getOnTag('WsServe')->get_path()
 );
 ~~~
