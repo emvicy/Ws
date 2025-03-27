@@ -142,18 +142,24 @@ class Ws
      * Important Hint: Push messages cannot be larger than 64kb!
      * This code shows how to push data into the running websocket server
      * In this case a system message is sent to the demo application registered as "chat"
-     * @param DTWsPackage $oDTWsPackage
+     * @param \Ws\DataType\DTWsPackage $oDTWsPackage
+     * @param bool                     $bParsedown default=false
      * @return void
      * @throws \ReflectionException
      */
-    public function push(DTWsPackage $oDTWsPackage)
+    public function push(DTWsPackage $oDTWsPackage, bool $bParsedown = false)
     {
         if (false === self::isRunning())
         {
             return;
         }
 
-        $sMessage = \Parsedown::instance()->text($oDTWsPackage->get_sMessage());
+        $sMessage = $oDTWsPackage->get_sMessage();
+
+        if (true === $bParsedown)
+        {
+            $sMessage = \Parsedown::instance()->text($oDTWsPackage->get_sMessage());
+        }
 
         try {
             $oPushClient = new PushClient(Config::MODULE('Ws')['socketFile']);
