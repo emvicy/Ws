@@ -7,6 +7,7 @@ namespace Ws\Model;
 
 use Bloatless\WebSocket\PushClient;
 use Bloatless\WebSocket\Server;
+use Exception;
 use MVC\Application;
 use MVC\Cache;
 use MVC\Config;
@@ -14,6 +15,7 @@ use MVC\Dir;
 use MVC\Error;
 use MVC\Lock;
 use MVC\Process;
+use Parsedown;
 use Ws\DataType\DTWsPackage;
 
 /**
@@ -24,17 +26,12 @@ class Ws
     /**
      * @var Server
      */
-    protected $oServer;
+    protected Server $oServer;
 
     /**
      * @var string
      */
-    protected $iPid;
-
-    /**
-     * @var string
-     */
-    protected $sLockFile;
+    protected string $sLockFile;
 
     /**
      * @var null
@@ -43,6 +40,7 @@ class Ws
 
     /**
      * Constructor
+     * @throws \ReflectionException
      */
     protected function __construct()
     {
@@ -65,7 +63,7 @@ class Ws
     /**
      * @return self|null
      */
-    public static function init()
+    public static function init(): ?Ws
     {
         if (null === self::$_oInstance)
         {
@@ -133,7 +131,7 @@ class Ws
     /**
      * @return Server
      */
-    public function getServer()
+    public function getServer(): Server
     {
         return $this->oServer;
     }
@@ -147,7 +145,7 @@ class Ws
      * @return void
      * @throws \ReflectionException
      */
-    public function push(DTWsPackage $oDTWsPackage, bool $bParsedown = false)
+    public function push(DTWsPackage $oDTWsPackage, bool $bParsedown = false): void
     {
         if (false === self::isRunning())
         {
@@ -158,7 +156,7 @@ class Ws
 
         if (true === $bParsedown)
         {
-            $sMessage = \Parsedown::instance()->text($oDTWsPackage->get_sMessage());
+            $sMessage = Parsedown::instance()->text($oDTWsPackage->get_sMessage());
         }
 
         try {
@@ -170,8 +168,8 @@ class Ws
                     'data' => $oDTWsPackage->get_sType() . '||' . $sMessage,
                 )
             );
-        } catch (\Exception $oException) {
-            \MVC\Error::exception($oException);
+        } catch (Exception $oException) {
+            Error::exception($oException);
         }
     }
 
@@ -179,7 +177,7 @@ class Ws
      * @return void
      * @throws \ReflectionException
      */
-    public function freeService()
+    public function freeService(): void
     {
         Process::deletePidFile(getmypid());
 
@@ -193,7 +191,7 @@ class Ws
      * @return bool
      * @throws \ReflectionException
      */
-    public static function isRunning()
+    public static function isRunning(): bool
     {
         @fsockopen(
             'tcp://' . Config::MODULE('Ws')['sAddress'], Config::MODULE('Ws')['iPort'],
@@ -213,7 +211,7 @@ class Ws
      * @return void
      * @throws \ReflectionException
      */
-    protected function killOnIsMissingPidFile()
+    protected function killOnIsMissingPidFile(): void
     {
         if (false === Process::hasPidFile(getmypid()))
         {
@@ -225,7 +223,7 @@ class Ws
      * @return void
      * @throws \ReflectionException
      */
-    protected function killOnMissingSocketFile()
+    protected function killOnMissingSocketFile(): void
     {
         if (false === file_exists(Config::MODULE('Ws')['socketFile']))
         {
@@ -238,7 +236,7 @@ class Ws
      * @return void
      * @throws \ReflectionException
      */
-    protected function killOnMaintenance()
+    protected function killOnMaintenance(): void
     {
         if (true === Application::isMaintenance())
         {
@@ -249,7 +247,10 @@ class Ws
     #-------------------------------------------------------------------------------------------------------------------
     # private
 
-    private function kill()
+    /**
+     * @throws \ReflectionException
+     */
+    private function kill(): void
     {
         $this->freeService();
         Process::deletePidFile(getmypid());
