@@ -49,7 +49,7 @@ function WsProcess(sData) {
             desktop: true,
             title: oJson.data.PNotifyType,
             icon: '/Ws_old/assets/' + oJson.data.PNotifyType + '.png',
-            text: aText[1].replace(/<\/?[^>]+(>|$)/g, "")
+            text: oJson.data.message.replace(/<\/?[^>]+(>|$)/g, "")
         }
     });
 }
