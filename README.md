@@ -38,6 +38,8 @@ $oDTRoutingAdditional = DTRoutingAdditional::create()
         // WS
         '/Ws_old/assets/pnotify.min.js',
         '/Ws_old/assets/pnotify.desktop.min.js',
+        
+        // contains the `WsProcess` function
         '/Ws_old/scripts/pnotify.min.js',
         
         // ddev:        '/Ws/scripts/wss.domain.port.min.js'
@@ -88,6 +90,15 @@ _add WebSocket Server Status somewhere (maybe `<footer>`) to your HTML_
 	</span>
 </div>
 ~~~
+
+---
+
+## modifying JS Behaviour `WsProcess`
+
+- instead of using `/Ws_old/scripts/pnotify.min.js` of the example, you can write your own `WsProcess` function in any JS script.
+- just make sure it is loaded and accessible _before_ `/Ws/scripts/wss.*.min.js`
+
+---
 
 ## WebSocket
 
@@ -143,14 +154,19 @@ just `kill` the process by hand
 _push Message to WebSocket Server_
 ~~~php
 \Ws\Model\Ws::init()->push(
-    DTWsPackage::create()
-        ->set_sType('notice')
-        ->set_sMessage('This is a **PUSH** Message at ' . date('Y-m-d H:i:s'))
+    DTWsPackage::create()->set_sData(json_encode(array(
+        'receiver' => 'PNnotify',
+        'PNotifyType' => 'notice',
+        'user' => 'robot',
+        'message' => __METHOD__ . "\n**PUSH TEST** at " . date('Y-m-d H:i:s') . "\npid: " . getmypid() . "\n",
+        'datetime' => date("Y-m-d H:i:s", time())
+    ))), 
+    bParsedown: false
 );
 ~~~
 
-- possible types: `info`, `success`, `notice`, `error`
-- you can write HTML as well as Markdown syntax as message text
+- possible PNotifyType: `info`, `success`, `notice`, `error`
+- if you want to get `message` markdown already get parsed on serverside before processing in JS, set `bParsedown: true`
 
 
 ## Customizing

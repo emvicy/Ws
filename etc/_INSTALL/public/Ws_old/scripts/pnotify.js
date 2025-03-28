@@ -10,50 +10,46 @@ var stack_bar_top = {"dir1": "down", "dir2": "right", "push": "top", "spacing1":
 var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2": 0};
 var stack_context = {"dir1": "down", "dir2": "left", "context": $("#stack-context")};
 
-// Ausgabe Responses
+// Process Data
 function WsProcess(sData) {
 
+    // example
+    // oJson.data {"receiver":"PNnotify","PNotifyType":"notice","user":"robot","message":"Foo\\Controller\\Ws\\Push::test\n**PUSH TEST** at 2025-03-28 08:21:14\npid: 140506\n","datetime":"2025-03-28 08:21:14"}
     var oJson = JSON.parse(sData);
-    var aData = oJson.data.split('||');
-    var sType = aData[0];
-    var sTitle = sType;
-    var sData = aData[1];
 
-    // var oDate = new Date();
-    // var sDateText = '[' + oDate.getFullYear() + '-' + (oDate.getMonth() + 1 > 9 ? oDate.getMonth() + 1 : '0' + oDate.getMonth() + 1) + '-' + (oDate.getDate() > 9 ? oDate.getDate() : '0' + oDate.getDate()) + ' ' + (oDate.getHours() > 9 ? oDate.getHours() : '0' + oDate.getHours()) + ':' + (oDate.getMinutes() > 9 ? oDate.getMinutes() : '0' + oDate.getMinutes()) + ':' + (oDate.getSeconds() > 9 ? oDate.getSeconds() : '0' + oDate.getSeconds()) + ']';
     var sClass = "stack-topright";
     var oStack = stack_topright;
 
-    if ('info' === aData[0]) {
+    if ('info' === oJson.data.PNotifyType) {
         var sClass = "stack-topleft";
         var oStack = stack_topleft;
     }
-    if ('success' === aData[0]) {
+    if ('success' === oJson.data.PNotifyType) {
         var sClass = "stack-topright";
         var oStack = stack_topright;
     }
-    if ('notice' === aData[0]) {
+    if ('notice' === oJson.data.PNotifyType) {
         var sClass = "stack-bottomright";
         var oStack = stack_bottomright;
     }
-    if ('error' === aData[0]) {
+    if ('error' === oJson.data.PNotifyType) {
         var sClass = "stack-bottomleft";
         var oStack = stack_bottomleft;
     }
 
     // PNotify.desktop.permission();
     new PNotify({
-        title: sTitle,
-        text: sData,
+        title: oJson.data.PNotifyType,
+        text: oJson.data.message,
         addclass: sClass,
         stack: oStack,
-        type: sType,
+        type: oJson.data.PNotifyType,
         textTrusted: true,
         desktop: {
             desktop: true,
-            title: sTitle,
-            icon: '/Ws_old/assets/' + sType + '.png',
-            text: aData[1].replace(/<\/?[^>]+(>|$)/g, "")
+            title: oJson.data.PNotifyType,
+            icon: '/Ws_old/assets/' + oJson.data.PNotifyType + '.png',
+            text: aText[1].replace(/<\/?[^>]+(>|$)/g, "")
         }
     });
 }
