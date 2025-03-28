@@ -11,32 +11,32 @@ var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2"
 var stack_context = {"dir1": "down", "dir2": "left", "context": $("#stack-context")};
 
 // Ausgabe Responses
-function write(sText) {
+function process(sData) {
 
-    var oJson = JSON.parse(sText);
-    var aText = oJson.data.split('||');
-    var sType = aText[0];
+    var oJson = JSON.parse(sData);
+    var aData = oJson.data.split('||');
+    var sType = aData[0];
     var sTitle = sType;
-    var sText = aText[1];
+    var sData = aData[1];
 
     // var oDate = new Date();
     // var sDateText = '[' + oDate.getFullYear() + '-' + (oDate.getMonth() + 1 > 9 ? oDate.getMonth() + 1 : '0' + oDate.getMonth() + 1) + '-' + (oDate.getDate() > 9 ? oDate.getDate() : '0' + oDate.getDate()) + ' ' + (oDate.getHours() > 9 ? oDate.getHours() : '0' + oDate.getHours()) + ':' + (oDate.getMinutes() > 9 ? oDate.getMinutes() : '0' + oDate.getMinutes()) + ':' + (oDate.getSeconds() > 9 ? oDate.getSeconds() : '0' + oDate.getSeconds()) + ']';
     var sClass = "stack-topright";
     var oStack = stack_topright;
 
-    if ('info' === aText[0]) {
+    if ('info' === aData[0]) {
         var sClass = "stack-topleft";
         var oStack = stack_topleft;
     }
-    if ('success' === aText[0]) {
+    if ('success' === aData[0]) {
         var sClass = "stack-topright";
         var oStack = stack_topright;
     }
-    if ('notice' === aText[0]) {
+    if ('notice' === aData[0]) {
         var sClass = "stack-bottomright";
         var oStack = stack_bottomright;
     }
-    if ('error' === aText[0]) {
+    if ('error' === aData[0]) {
         var sClass = "stack-bottomleft";
         var oStack = stack_bottomleft;
     }
@@ -44,7 +44,7 @@ function write(sText) {
     // PNotify.desktop.permission();
     new PNotify({
         title: sTitle,
-        text: sText,
+        text: sData,
         addclass: sClass,
         stack: oStack,
         type: sType,
@@ -53,7 +53,7 @@ function write(sText) {
             desktop: true,
             title: sTitle,
             icon: '/Ws_old/assets/' + sType + '.png',
-            text: aText[1].replace(/<\/?[^>]+(>|$)/g, "")
+            text: aData[1].replace(/<\/?[^>]+(>|$)/g, "")
         }
     });
 }

@@ -64,7 +64,7 @@ class Ws extends _Master
             \Ws\Model\Ws::init()->push(
                 DTWsPackage::create()
                     ->set_sType($aType[$iRand])
-                    ->set_sMessage("<code>" . __METHOD__ . "</code>\n**PUSH TEST** at " . date('Y-m-d H:i:s') . "\n<code>pid: " . getmypid() . "</code>\n")
+                    ->set_sData("<code>" . __METHOD__ . "</code>\n**PUSH TEST** at " . date('Y-m-d H:i:s') . "\n<code>pid: " . getmypid() . "</code>\n")
             );
             sleep(5);
         }

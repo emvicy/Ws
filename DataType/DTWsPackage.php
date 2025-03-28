@@ -12,7 +12,7 @@ class DTWsPackage
 {
 	use TraitDataType;
 
-	public const DTHASH = 'fd955f01507ae8482d7239982826f37e';
+	public const DTHASH = 'b611fac424a58f390b83600c6c0b3b65';
 
 	/**
 	 * @required true
@@ -30,7 +30,7 @@ class DTWsPackage
 	 * @required true
 	 * @var string
 	 */
-	protected $sMessage;
+	protected $sData;
 
 	/**
 	 * @required true
@@ -49,7 +49,7 @@ class DTWsPackage
 		$aData = $oDTValue->get_mValue();
 		$this->sApp = "Informer";
 		$this->sAction = "echo";
-		$this->sMessage = '';
+		$this->sData = '';
 		$this->sType = "info";
 		$this->setProperties($oDTValue);
 
@@ -106,11 +106,11 @@ class DTWsPackage
 	 * @return $this
 	 * @throws \ReflectionException
 	 */
-	public function set_sMessage(string $mValue)
+	public function set_sData(string $mValue)
 	{
 		$oDTValue = DTValue::create()->set_mValue($mValue); 
-		\MVC\Event::run('DTWsPackage.set_sMessage.before', $oDTValue);
-		$this->sMessage = (string) $oDTValue->get_mValue();
+		\MVC\Event::run('DTWsPackage.set_sData.before', $oDTValue);
+		$this->sData = (string) $oDTValue->get_mValue();
 
 		return $this;
 	}
@@ -157,10 +157,10 @@ class DTWsPackage
 	 * @return string
 	 * @throws \ReflectionException
 	 */
-	public function get_sMessage() : string
+	public function get_sData() : string
 	{
-		$oDTValue = DTValue::create()->set_mValue($this->sMessage); 
-		\MVC\Event::run('DTWsPackage.get_sMessage.before', $oDTValue);
+		$oDTValue = DTValue::create()->set_mValue($this->sData); 
+		\MVC\Event::run('DTWsPackage.get_sData.before', $oDTValue);
 
 		return $oDTValue->get_mValue();
 	}
@@ -196,9 +196,9 @@ class DTWsPackage
 	/**
 	 * @return string
 	 */
-	public static function getPropertyName_sMessage()
+	public static function getPropertyName_sData()
 	{
-        return 'sMessage';
+        return 'sData';
 	}
 
 	/**

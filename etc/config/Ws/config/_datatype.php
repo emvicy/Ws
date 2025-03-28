@@ -35,7 +35,7 @@ $aDataType['class']['DTWsPackage'] = array(
     'property' => array(
         array('key' => 'sApp', 'var' => 'string', 'value' => 'Informer', 'required' => true, 'forceCasting' => true,),
         array('key' => 'sAction', 'var' => 'string', 'value' => 'echo', 'required' => true, 'forceCasting' => true,),
-        array('key' => 'sMessage', 'var' => 'string', 'value' => '', 'required' => true, 'forceCasting' => true,),
+        array('key' => 'sData', 'var' => 'string', 'value' => '', 'required' => true, 'forceCasting' => true,),
         array('key' => 'sType', 'var' => 'string', 'value' => 'info', 'required' => true, 'forceCasting' => true,),
     )
 );

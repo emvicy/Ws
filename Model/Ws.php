@@ -152,11 +152,11 @@ class Ws
             return;
         }
 
-        $sMessage = $oDTWsPackage->get_sMessage();
+        $sData = $oDTWsPackage->get_sData();
 
         if (true === $bParsedown)
         {
-            $sMessage = Parsedown::instance()->text($oDTWsPackage->get_sMessage());
+            $sData = Parsedown::instance()->text($oDTWsPackage->get_sData());
         }
 
         try {
@@ -165,7 +165,7 @@ class Ws
                 $oDTWsPackage->get_sApp(),
                 array(
                     'action' => $oDTWsPackage->get_sAction(),
-                    'data' => $oDTWsPackage->get_sType() . '||' . $sMessage,
+                    'data' => $sData,
                 )
             );
         } catch (Exception $oException) {
