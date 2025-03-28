@@ -37,10 +37,12 @@ function WsProcess(sData) {
         var oStack = stack_bottomleft;
     }
 
+    var sText = oJson.data.message;
+
     // PNotify.desktop.permission();
     new PNotify({
         title: oJson.data.PNotifyType,
-        text: oJson.data.message,
+        text: sText,
         addclass: sClass,
         stack: oStack,
         type: oJson.data.PNotifyType,
@@ -49,7 +51,7 @@ function WsProcess(sData) {
             desktop: true,
             title: oJson.data.PNotifyType,
             icon: '/Ws_old/assets/' + oJson.data.PNotifyType + '.png',
-            text: oJson.data.message.replace(/<\/?[^>]+(>|$)/g, "")
+            text: sText.replace(/<\/?[^>]+(>|$)/g, "")
         }
     });
 }
