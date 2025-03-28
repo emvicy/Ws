@@ -11,7 +11,7 @@ var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2"
 var stack_context = {"dir1": "down", "dir2": "left", "context": $("#stack-context")};
 
 // Ausgabe Responses
-function process(sData) {
+function WsProcess(sData) {
 
     var oJson = JSON.parse(sData);
     var aData = oJson.data.split('||');

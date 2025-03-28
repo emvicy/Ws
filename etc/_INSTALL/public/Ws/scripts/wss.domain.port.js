@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         try {
 
             oWs = new WebSocket(sUrl);
-            // process('Connecting... (readyState ' + oWs.readyState + ')');
+            // WsProcess('Connecting... (readyState ' + oWs.readyState + ')');
 
             oWs.onopen = function (oMessage) {
                 var sMsg = 'Connection successfully opened (readyState ' + this.readyState + ')';
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 sData = sData.trim();
 
                 if ('' !== sData) {
-                    process(sData);
+                    WsProcess(sData);
                 }
             };
 
             oWs.onclose = function (oMessage) {
                 if (this.readyState == 2) {
                     var sMsg = 'Closing... The connection is going throught the closing handshake (readyState ' + this.readyState + ')';
-                    process('{"sMessage":"' + sMsg + '"}');
+                    WsProcess('{"sMessage":"' + sMsg + '"}');
                 } else if (this.readyState == 3) {
                     sMsg = 'Connection closed... The connection has been closed or could not be opened (readyState ' + this.readyState + ')';
                     // @see http://stackoverflow.com/a/951057/2487859
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         websocket();
                     });
                 } else {
-                    process('Connection closed... (unhandled readyState ' + this.readyState + ')');
+                    WsProcess('Connection closed... (unhandled readyState ' + this.readyState + ')');
                     // @see http://stackoverflow.com/a/951057/2487859
                     sleep(5000).then(() => {
                         console.log('try again...');
